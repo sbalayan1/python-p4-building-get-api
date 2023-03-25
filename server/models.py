@@ -11,7 +11,7 @@ db = SQLAlchemy(metadata=metadata)
 class Game(db.Model, SerializerMixin): #here we add a SerializerMixin from sqlalchemy_serializer. This lets us map a model's attributes to a dictionary. Simply adding the SerializerMixin adds a to_dict() instance method to the model. Note that if a model has an association, like reviews for instance, you'll run into issues if the Reviews model does not have a SerializerMixin. 
     __tablename__ = 'games'
 
-    serializer_rules = ('-reviews.game',)
+    serialize_rules = ('-reviews.game',)
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, unique=True)
@@ -26,10 +26,15 @@ class Game(db.Model, SerializerMixin): #here we add a SerializerMixin from sqlal
     def __repr__(self):
         return f'<Game {self.title} for {self.platform}>'
 
+
+
+
+
+###my code
 class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews'
 
-    serializer_ruels = ('-game.reviews', '-user.reviews')
+    serialize_rules = ('-game.reviews', '-user.reviews',)
     
     id = db.Column(db.Integer, primary_key=True)
     score = db.Column(db.Integer)
@@ -43,10 +48,13 @@ class Review(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Review ({self.id}) of {self.game}: {self.score}/10>'
 
+
+
+### my code
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
-    serializer_rules = ('-reviews.user')
+    serialize_rules = ('-reviews.user',)
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
